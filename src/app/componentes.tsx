@@ -3,35 +3,44 @@ import {
   Image,
   ImageSourcePropType,
   StyleSheet,
+  Text,
   TouchableOpacity,
 } from "react-native";
 
 type Props = {
   source: ImageSourcePropType;
+  text: string;
   onPress: (event: GestureResponderEvent) => void;
 };
 
-export default function SocialButton({ source, onPress }: Props) {
+export default function SocialButton({ source, text, onPress }: Props) {
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>
       <Image source={source} style={styles.icon} />
+      <Text style={styles.text}>{text}</Text>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    width: 55,
-    height: 55,
-    borderRadius: 30,
-    backgroundColor: "#fff",
-    justifyContent: "center",
+    flexDirection: "row",
     alignItems: "center",
-    elevation: 3,
+    gap: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#eee",
   },
   icon: {
     width: 30,
     height: 30,
     resizeMode: "contain",
+  },
+  text: {
+    fontSize: 13,
+    color: "#333",
   },
 });
