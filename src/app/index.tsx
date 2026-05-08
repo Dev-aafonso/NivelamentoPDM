@@ -1,17 +1,18 @@
 import SocialButton from "./componentes";
 
 import {
-    Alert,
-    Image,
-    ImageBackground,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  Dimensions,
+  Image,
+  ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import { useRouter } from "expo-router";
@@ -22,6 +23,7 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [scrollEnabled, setScrollEnabled] = useState(false);
 
   function handleLogin() {
     if (!email.includes("@")) {
@@ -44,7 +46,14 @@ export default function Login() {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       style={{ flex: 1 }}
     >
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
+        scrollEnabled={scrollEnabled}
+        onContentSizeChange={(w, h) => {
+          setScrollEnabled(h > Dimensions.get("window").height);
+        }}
+      >
         <ImageBackground
           source={require("../assets/Background.png")}
           style={styles.background}
@@ -74,6 +83,7 @@ export default function Login() {
                 onChangeText={setSenha}
               />
 
+              {/* BOTÃO */}
               <TouchableOpacity
                 style={[styles.button, isDisabled && styles.buttonDisabled]}
                 onPress={handleLogin}
@@ -82,18 +92,21 @@ export default function Login() {
                 <Text style={styles.buttonText}>Login</Text>
               </TouchableOpacity>
 
+              {/* CADASTRO */}
               <TouchableOpacity onPress={() => router.push("/cadastro")}>
                 <Text style={styles.loginText}>
                   Não possui conta? Cadastre-se
                 </Text>
               </TouchableOpacity>
 
+              {/* SEPARADOR */}
               <View style={styles.separatorContainer}>
                 <View style={styles.line} />
                 <Text style={styles.separatorText}>OU</Text>
                 <View style={styles.line} />
               </View>
 
+              {/* SOCIAL */}
               <View style={styles.socialContainer}>
                 <SocialButton
                   source={require("../assets/Google.png")}
@@ -138,6 +151,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 2,
     borderColor: "#702516e4",
+
+    // 🔥 ESSENCIAL pra evitar scroll desnecessário
+    maxHeight: "95%",
 
     shadowColor: "#000",
     shadowOffset: { width: 4, height: 6 },

@@ -1,47 +1,58 @@
 import {
-  Animated,
-  Easing,
-  Image,
-  ImageBackground,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Animated,
+    Easing,
+    Image,
+    ImageBackground,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useRef, useState } from "react";
-
-import { useRouter } from "expo-router";
 
 type AnimMap = {
   [key: string]: Animated.Value;
 };
 
-export default function Planos() {
-  const [selected, setSelected] = useState("Plus");
+export default function Pagamentos() {
+  const [selected, setSelected] = useState("Cartão");
   const animations = useRef<AnimMap>({}).current;
+
   const router = useRouter();
 
-  const planos = [
+  // 🔥 TIPAGEM SEGURA
+  const { plano, preco } = useLocalSearchParams<{
+    plano?: string;
+    preco?: string;
+  }>();
+
+  const pagamentos = [
     {
-      nome: "Grátis",
-      preco: "R$ 0,00",
-      descricao: "Com anúncios e dez usos diários limitados.",
+      nome: "Cartão de crédito",
+      key: "Cartão",
+      descricao: "Parcelado em até 6x vezes sem juros.",
+      icon: require("../assets/Visa.png"),
+      extra: require("../assets/Nubank.png"),
     },
     {
-      nome: "Plus",
-      preco: "R$ 10,00",
-      descricao: "Sem anúncios, cinquenta usos diários.",
+      nome: "PIX",
+      key: "Pix",
+      descricao: "Pagamento instantâneo via agência.",
+      icon: require("../assets/Pix.png"),
     },
     {
-      nome: "Pro",
-      preco: "R$ 50,00",
-      descricao: "Sem anúncios, cem usos diários.",
+      nome: "Pix parcelado",
+      key: "PixParcelado",
+      descricao: "Pagamento instantâneo via agência, parcelado",
+      icon: require("../assets/Pix-Parcelado.png"),
     },
     {
-      nome: "Ultra Pro Plus",
-      preco: "R$ 80,00",
-      descricao: "Sem anúncios, cento e cinquenta usos diários.",
+      nome: "Boleto",
+      key: "Boleto",
+      descricao: "Forma de boleto, para imprimir e pagar.",
+      icon: require("../assets/Boleto.png"),
     },
   ];
 
@@ -52,7 +63,7 @@ export default function Planos() {
     return animations[nome];
   }
 
-  function selecionarPlano(nome: string) {
+  function selecionar(nome: string) {
     if (nome === selected) return;
 
     setSelected(nome);
@@ -67,14 +78,13 @@ export default function Planos() {
     });
   }
 
-  function escolherPlano() {
-    const planoSelecionado = planos.find((p) => p.nome === selected);
-
+  function escolherPagamento() {
     router.push({
-      pathname: "/Pagamentos",
+      pathname: "/Confirmacao" as any,
       params: {
-        plano: selected,
-        preco: planoSelecionado?.preco,
+        plano,
+        preco,
+        pagamento: selected,
       },
     });
   }
@@ -88,12 +98,18 @@ export default function Planos() {
         <View style={styles.card}>
           <Image source={require("../assets/Logo.png")} style={styles.logo} />
 
-          <Text style={styles.title}>Escolha seu plano</Text>
+          <Text style={styles.title}>Forma de pagamento</Text>
 
-          <View style={styles.planosContainer}>
-            {planos.map((plano) => {
-              const anim = getAnim(plano.nome);
-              const isActive = selected === plano.nome;
+          <View style={styles.resumo}>
+            <Text style={styles.resumoText}>
+              {plano ?? "Plano"} • {preco ?? ""}
+            </Text>
+          </View>
+
+          <View style={styles.lista}>
+            {pagamentos.map((item) => {
+              const anim = getAnim(item.key);
+              const isActive = selected === item.key;
 
               const scale = anim.interpolate({
                 inputRange: [0, 1],
@@ -107,13 +123,13 @@ export default function Planos() {
 
               return (
                 <TouchableOpacity
-                  key={plano.nome}
+                  key={item.key}
                   activeOpacity={0.9}
-                  onPress={() => selecionarPlano(plano.nome)}
+                  onPress={() => selecionar(item.key)}
                 >
                   <Animated.View
                     style={[
-                      styles.cardPlano,
+                      styles.item,
                       {
                         transform: [{ scale }],
                         backgroundColor: bgColor,
@@ -121,21 +137,20 @@ export default function Planos() {
                       },
                     ]}
                   >
-                    {/* BADGE leve */}
-                    {plano.nome === "Plus" && (
-                      <View style={styles.badge}>
-                        <Text style={styles.badgeText}>POPULAR</Text>
-                      </View>
-                    )}
-
                     <View
                       style={[styles.radio, isActive && styles.radioActive]}
                     />
 
                     <View style={styles.info}>
-                      <Text style={styles.nome}>{plano.nome}</Text>
-                      <Text style={styles.preco}>{plano.preco}</Text>
-                      <Text style={styles.descricao}>{plano.descricao}</Text>
+                      <Text style={styles.nome}>{item.nome}</Text>
+                      <Text style={styles.descricao}>{item.descricao}</Text>
+                    </View>
+
+                    <View style={styles.icons}>
+                      {item.extra && (
+                        <Image source={item.extra} style={styles.iconSmall} />
+                      )}
+                      <Image source={item.icon} style={styles.icon} />
                     </View>
                   </Animated.View>
                 </TouchableOpacity>
@@ -143,8 +158,8 @@ export default function Planos() {
             })}
           </View>
 
-          <TouchableOpacity style={styles.botao} onPress={escolherPlano}>
-            <Text style={styles.botaoTexto}>Escolher {selected}</Text>
+          <TouchableOpacity style={styles.botao} onPress={escolherPagamento}>
+            <Text style={styles.botaoTexto}>Continuar</Text>
           </TouchableOpacity>
 
           <Text style={styles.footer}>VERATES.IA</Text>
@@ -155,9 +170,7 @@ export default function Planos() {
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-  },
+  background: { flex: 1 },
 
   container: {
     flex: 1,
@@ -185,8 +198,8 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    width: 80,
-    height: 80,
+    width: 70,
+    height: 70,
     resizeMode: "contain",
     marginBottom: 8,
   },
@@ -195,37 +208,36 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "900",
     color: "#702516",
-    marginBottom: 18,
+    marginBottom: 10,
     fontFamily: "Averia Serif Libre",
   },
 
-  planosContainer: {
+  // 🔥 NOVO ESTILO
+  resumo: {
+    backgroundColor: "#f7d64330",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    marginBottom: 14,
+  },
+
+  resumoText: {
+    color: "#702516",
+    fontWeight: "600",
+    fontSize: 13,
+  },
+
+  lista: {
     width: "100%",
     gap: 12,
   },
 
-  cardPlano: {
+  item: {
     flexDirection: "row",
     borderRadius: 10,
     padding: 14,
     borderWidth: 1.5,
     alignItems: "center",
-  },
-
-  badge: {
-    position: "absolute",
-    top: -8,
-    right: 8,
-    backgroundColor: "#702516",
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 5,
-  },
-
-  badgeText: {
-    color: "#fff",
-    fontSize: 9,
-    fontWeight: "bold",
   },
 
   radio: {
@@ -251,15 +263,27 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
-  preco: {
-    fontSize: 15,
-    color: "#702516",
-    fontWeight: "600",
-  },
-
   descricao: {
     fontSize: 12,
     color: "#333",
+  },
+
+  icons: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+
+  icon: {
+    width: 32,
+    height: 32,
+    resizeMode: "contain",
+  },
+
+  iconSmall: {
+    width: 26,
+    height: 26,
+    resizeMode: "contain",
   },
 
   botao: {

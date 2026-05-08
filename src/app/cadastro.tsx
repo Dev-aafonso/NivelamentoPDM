@@ -2,6 +2,7 @@ import SocialButton from "./componentes";
 
 import {
   Alert,
+  Dimensions,
   Image,
   ImageBackground,
   KeyboardAvoidingView,
@@ -25,7 +26,8 @@ export default function Cadastro() {
   const [senha, setSenha] = useState("");
   const [confirmSenha, setConfirmSenha] = useState("");
 
-  // ✅ estado de erros
+  const [scrollEnabled, setScrollEnabled] = useState(false);
+
   const [errors, setErrors] = useState({
     username: "",
     email: "",
@@ -41,27 +43,15 @@ export default function Cadastro() {
       confirmSenha: "",
     };
 
-    // ✅ validações
-    if (!username.trim()) {
-      newErrors.username = "Nome obrigatório";
-    }
-
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = "E-mail inválido";
-    }
-
-    if (senha.length < 6) {
-      newErrors.senha = "Mínimo de 6 caracteres";
-    }
-
-    if (senha !== confirmSenha) {
+    if (!username.trim()) newErrors.username = "Nome obrigatório";
+    if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "E-mail inválido";
+    if (senha.length < 6) newErrors.senha = "Mínimo de 6 caracteres";
+    if (senha !== confirmSenha)
       newErrors.confirmSenha = "As senhas não coincidem";
-    }
 
     setErrors(newErrors);
 
-    const hasError = Object.values(newErrors).some((e) => e !== "");
-    if (hasError) return;
+    if (Object.values(newErrors).some((e) => e)) return;
 
     Alert.alert("Sucesso", "Cadastro realizado!");
     router.push("/planos");
@@ -76,80 +66,81 @@ export default function Cadastro() {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       style={{ flex: 1 }}
     >
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
+        showsVerticalScrollIndicator={false}
+        scrollEnabled={scrollEnabled}
+        onContentSizeChange={(w, h) => {
+          setScrollEnabled(h > Dimensions.get("window").height);
+        }}
+      >
         <ImageBackground
           source={require("../assets/Background.png")}
           style={styles.background}
         >
           <View style={styles.card}>
             <Image source={require("../assets/Logo.png")} style={styles.logo} />
-
             <Text style={styles.title}>VERATES.IA</Text>
 
             <View style={styles.forms}>
-              {/* USERNAME */}
               <Text style={styles.label}>Nome de Usuário</Text>
               <TextInput
                 placeholder="Digite seu nome"
                 style={[styles.input, errors.username && styles.inputError]}
                 value={username}
-                onChangeText={(text) => {
-                  setUsername(text);
+                onChangeText={(t) => {
+                  setUsername(t);
                   setErrors({ ...errors, username: "" });
                 }}
               />
-              {errors.username ? (
+              {!!errors.username && (
                 <Text style={styles.errorText}>{errors.username}</Text>
-              ) : null}
+              )}
 
-              {/* EMAIL */}
               <Text style={styles.label}>E-mail</Text>
               <TextInput
                 placeholder="Digite seu e-mail"
                 style={[styles.input, errors.email && styles.inputError]}
                 value={email}
-                onChangeText={(text) => {
-                  setEmail(text);
+                onChangeText={(t) => {
+                  setEmail(t);
                   setErrors({ ...errors, email: "" });
                 }}
               />
-              {errors.email ? (
+              {!!errors.email && (
                 <Text style={styles.errorText}>{errors.email}</Text>
-              ) : null}
+              )}
 
-              {/* SENHA */}
               <Text style={styles.label}>Senha</Text>
               <TextInput
                 placeholder="Digite sua senha"
                 secureTextEntry
                 style={[styles.input, errors.senha && styles.inputError]}
                 value={senha}
-                onChangeText={(text) => {
-                  setSenha(text);
+                onChangeText={(t) => {
+                  setSenha(t);
                   setErrors({ ...errors, senha: "" });
                 }}
               />
-              {errors.senha ? (
+              {!!errors.senha && (
                 <Text style={styles.errorText}>{errors.senha}</Text>
-              ) : null}
+              )}
 
-              {/* CONFIRMAR SENHA */}
               <Text style={styles.label}>Confirmar Senha</Text>
               <TextInput
                 placeholder="Confirme sua senha"
                 secureTextEntry
                 style={[styles.input, errors.confirmSenha && styles.inputError]}
                 value={confirmSenha}
-                onChangeText={(text) => {
-                  setConfirmSenha(text);
+                onChangeText={(t) => {
+                  setConfirmSenha(t);
                   setErrors({ ...errors, confirmSenha: "" });
                 }}
               />
-              {errors.confirmSenha ? (
+              {!!errors.confirmSenha && (
                 <Text style={styles.errorText}>{errors.confirmSenha}</Text>
-              ) : null}
+              )}
 
-              {/* BOTÃO */}
               <TouchableOpacity
                 style={[styles.button, isDisabled && styles.buttonDisabled]}
                 onPress={handleCadastro}
@@ -158,21 +149,18 @@ export default function Cadastro() {
                 <Text style={styles.buttonText}>Cadastrar</Text>
               </TouchableOpacity>
 
-              {/* LOGIN */}
               <TouchableOpacity onPress={() => router.push("/")}>
                 <Text style={styles.loginText}>
                   Já possui uma conta? Faça seu login.
                 </Text>
               </TouchableOpacity>
 
-              {/* SEPARADOR */}
               <View style={styles.separatorContainer}>
                 <View style={styles.line} />
                 <Text style={styles.separatorText}>OU</Text>
                 <View style={styles.line} />
               </View>
 
-              {/* SOCIAL */}
               <View style={styles.socialContainer}>
                 <SocialButton
                   source={require("../assets/Google.png")}
