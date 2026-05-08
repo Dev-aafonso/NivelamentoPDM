@@ -1,43 +1,75 @@
 import SocialButton from "./componentes";
 
 import {
-    Alert,
-    Image,
-    ImageBackground,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  Image,
+  ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import { useRouter } from "expo-router";
 import { useState } from "react";
 
-export default function Login() {
+export default function Cadastro() {
   const router = useRouter();
 
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [confirmSenha, setConfirmSenha] = useState("");
 
-  function handleLogin() {
-    if (!email.includes("@")) {
-      Alert.alert("Erro", "Digite um e-mail válido");
-      return;
+  // ✅ estado de erros
+  const [errors, setErrors] = useState({
+    username: "",
+    email: "",
+    senha: "",
+    confirmSenha: "",
+  });
+
+  function handleCadastro() {
+    let newErrors = {
+      username: "",
+      email: "",
+      senha: "",
+      confirmSenha: "",
+    };
+
+    // ✅ validações
+    if (!username.trim()) {
+      newErrors.username = "Nome obrigatório";
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = "E-mail inválido";
     }
 
     if (senha.length < 6) {
-      Alert.alert("Erro", "Senha inválida");
-      return;
+      newErrors.senha = "Mínimo de 6 caracteres";
     }
 
-    Alert.alert("Sucesso", "Login realizado!");
+    if (senha !== confirmSenha) {
+      newErrors.confirmSenha = "As senhas não coincidem";
+    }
+
+    setErrors(newErrors);
+
+    const hasError = Object.values(newErrors).some((e) => e !== "");
+    if (hasError) return;
+
+    Alert.alert("Sucesso", "Cadastro realizado!");
+    router.push("/planos");
   }
 
-  const isDisabled = !email || !senha;
+  const hasErrors = Object.values(errors).some((e) => e);
+  const isDisabled =
+    !username || !email || !senha || !confirmSenha || hasErrors;
 
   return (
     <KeyboardAvoidingView
@@ -55,45 +87,92 @@ export default function Login() {
             <Text style={styles.title}>VERATES.IA</Text>
 
             <View style={styles.forms}>
+              {/* USERNAME */}
+              <Text style={styles.label}>Nome de Usuário</Text>
+              <TextInput
+                placeholder="Digite seu nome"
+                style={[styles.input, errors.username && styles.inputError]}
+                value={username}
+                onChangeText={(text) => {
+                  setUsername(text);
+                  setErrors({ ...errors, username: "" });
+                }}
+              />
+              {errors.username ? (
+                <Text style={styles.errorText}>{errors.username}</Text>
+              ) : null}
+
               {/* EMAIL */}
               <Text style={styles.label}>E-mail</Text>
               <TextInput
                 placeholder="Digite seu e-mail"
-                style={styles.input}
+                style={[styles.input, errors.email && styles.inputError]}
                 value={email}
-                onChangeText={setEmail}
+                onChangeText={(text) => {
+                  setEmail(text);
+                  setErrors({ ...errors, email: "" });
+                }}
               />
+              {errors.email ? (
+                <Text style={styles.errorText}>{errors.email}</Text>
+              ) : null}
 
               {/* SENHA */}
               <Text style={styles.label}>Senha</Text>
               <TextInput
                 placeholder="Digite sua senha"
                 secureTextEntry
-                style={styles.input}
+                style={[styles.input, errors.senha && styles.inputError]}
                 value={senha}
-                onChangeText={setSenha}
+                onChangeText={(text) => {
+                  setSenha(text);
+                  setErrors({ ...errors, senha: "" });
+                }}
               />
+              {errors.senha ? (
+                <Text style={styles.errorText}>{errors.senha}</Text>
+              ) : null}
 
+              {/* CONFIRMAR SENHA */}
+              <Text style={styles.label}>Confirmar Senha</Text>
+              <TextInput
+                placeholder="Confirme sua senha"
+                secureTextEntry
+                style={[styles.input, errors.confirmSenha && styles.inputError]}
+                value={confirmSenha}
+                onChangeText={(text) => {
+                  setConfirmSenha(text);
+                  setErrors({ ...errors, confirmSenha: "" });
+                }}
+              />
+              {errors.confirmSenha ? (
+                <Text style={styles.errorText}>{errors.confirmSenha}</Text>
+              ) : null}
+
+              {/* BOTÃO */}
               <TouchableOpacity
                 style={[styles.button, isDisabled && styles.buttonDisabled]}
-                onPress={handleLogin}
+                onPress={handleCadastro}
                 disabled={isDisabled}
               >
-                <Text style={styles.buttonText}>Login</Text>
+                <Text style={styles.buttonText}>Cadastrar</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => router.push("/cadastro")}>
+              {/* LOGIN */}
+              <TouchableOpacity onPress={() => router.push("/")}>
                 <Text style={styles.loginText}>
-                  Não possui conta? Cadastre-se
+                  Já possui uma conta? Faça seu login.
                 </Text>
               </TouchableOpacity>
 
+              {/* SEPARADOR */}
               <View style={styles.separatorContainer}>
                 <View style={styles.line} />
                 <Text style={styles.separatorText}>OU</Text>
                 <View style={styles.line} />
               </View>
 
+              {/* SOCIAL */}
               <View style={styles.socialContainer}>
                 <SocialButton
                   source={require("../assets/Google.png")}
@@ -170,7 +249,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontSize: 14,
     color: "#702516",
-    marginBottom: 2,
   },
 
   input: {
@@ -183,7 +261,19 @@ const styles = StyleSheet.create({
     borderColor: "#702516e4",
     fontSize: 16,
     alignSelf: "center",
-    letterSpacing: 0.5,
+  },
+
+  inputError: {
+    borderColor: "red",
+  },
+
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    width: "90%",
+    alignSelf: "center",
+    marginTop: -5,
+    marginBottom: 5,
   },
 
   button: {
@@ -194,6 +284,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
     alignSelf: "center",
+
+    borderWidth: 1.5, // 👈 igual ao input
+    borderColor: "#702516e4",
   },
 
   buttonDisabled: {
@@ -220,6 +313,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     width: "90%",
     alignSelf: "center",
+    paddingHorizontal: 10,
   },
 
   line: {
