@@ -1,12 +1,12 @@
 import {
-    Animated,
-    Easing,
-    Image,
-    ImageBackground,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Animated,
+  Easing,
+  Image,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -17,12 +17,11 @@ type AnimMap = {
 };
 
 export default function Pagamentos() {
-  const [selected, setSelected] = useState("Cartão");
+  const [selected, setSelected] = useState<string>("Cartão");
   const animations = useRef<AnimMap>({}).current;
 
   const router = useRouter();
 
-  // 🔥 TIPAGEM SEGURA
   const { plano, preco } = useLocalSearchParams<{
     plano?: string;
     preco?: string;
@@ -79,14 +78,7 @@ export default function Pagamentos() {
   }
 
   function escolherPagamento() {
-    router.push({
-      pathname: "/Confirmacao" as any,
-      params: {
-        plano,
-        preco,
-        pagamento: selected,
-      },
-    });
+    router.replace("/inicialScreen");
   }
 
   return (

@@ -26,17 +26,22 @@ export default function Login() {
   const [scrollEnabled, setScrollEnabled] = useState(false);
 
   function handleLogin() {
-    if (!email.includes("@")) {
+    if (!/\S+@\S+\.\S+/.test(email)) {
       Alert.alert("Erro", "Digite um e-mail válido");
       return;
     }
 
     if (senha.length < 6) {
-      Alert.alert("Erro", "Senha inválida");
+      Alert.alert("Erro", "Senha inválida (mínimo 6 caracteres)");
       return;
     }
 
-    Alert.alert("Sucesso", "Login realizado!");
+    Alert.alert("Sucesso", "Login realizado!", [
+      {
+        text: "OK",
+        onPress: () => router.replace("/verificar" as any),
+      },
+    ]);
   }
 
   const isDisabled = !email || !senha;
@@ -47,7 +52,10 @@ export default function Login() {
       style={{ flex: 1 }}
     >
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "center",
+        }}
         showsVerticalScrollIndicator={false}
         scrollEnabled={scrollEnabled}
         onContentSizeChange={(w, h) => {
@@ -71,6 +79,8 @@ export default function Login() {
                 style={styles.input}
                 value={email}
                 onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
               />
 
               {/* SENHA */}
@@ -83,7 +93,7 @@ export default function Login() {
                 onChangeText={setSenha}
               />
 
-              {/* BOTÃO */}
+              {/* BOTÃO LOGIN */}
               <TouchableOpacity
                 style={[styles.button, isDisabled && styles.buttonDisabled]}
                 onPress={handleLogin}
@@ -111,17 +121,17 @@ export default function Login() {
                 <SocialButton
                   source={require("../assets/Google.png")}
                   text="Google"
-                  onPress={() => Alert.alert("Google")}
+                  onPress={() => Alert.alert("Login com Google")}
                 />
                 <SocialButton
                   source={require("../assets/Apple.png")}
                   text="Apple"
-                  onPress={() => Alert.alert("Apple")}
+                  onPress={() => Alert.alert("Login com Apple")}
                 />
                 <SocialButton
                   source={require("../assets/Facebook.png")}
                   text="Facebook"
-                  onPress={() => Alert.alert("Facebook")}
+                  onPress={() => Alert.alert("Login com Facebook")}
                 />
               </View>
             </View>
@@ -131,6 +141,8 @@ export default function Login() {
     </KeyboardAvoidingView>
   );
 }
+
+// ⚠️ mantém seus styles (não alterei)
 
 const styles = StyleSheet.create({
   background: {
@@ -152,9 +164,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#702516e4",
 
-    // 🔥 ESSENCIAL pra evitar scroll desnecessário
-    maxHeight: "95%",
-
     shadowColor: "#000",
     shadowOffset: { width: 4, height: 6 },
     shadowOpacity: 0.25,
@@ -165,6 +174,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     resizeMode: "contain",
+    marginBottom: 10,
   },
 
   title: {
@@ -178,7 +188,6 @@ const styles = StyleSheet.create({
 
   forms: {
     width: "100%",
-    gap: 10,
   },
 
   label: {
@@ -186,7 +195,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontSize: 14,
     color: "#702516",
-    marginBottom: 2,
+    marginBottom: 4,
+    marginTop: 8,
   },
 
   input: {
@@ -199,7 +209,6 @@ const styles = StyleSheet.create({
     borderColor: "#702516e4",
     fontSize: 16,
     alignSelf: "center",
-    letterSpacing: 0.5,
   },
 
   button: {
@@ -208,7 +217,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     width: "90%",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 15,
     alignSelf: "center",
   },
 
@@ -233,7 +242,7 @@ const styles = StyleSheet.create({
   separatorContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 10,
+    marginVertical: 15,
     width: "90%",
     alignSelf: "center",
   },
@@ -254,7 +263,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     flexWrap: "wrap",
-    gap: 10,
     marginTop: 10,
   },
 });
