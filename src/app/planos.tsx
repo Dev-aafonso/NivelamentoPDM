@@ -70,13 +70,17 @@ export default function Planos() {
   function escolherPlano() {
     const planoSelecionado = planos.find((p) => p.nome === selected);
 
-    router.push({
-      pathname: "/Pagamentos",
-      params: {
-        plano: selected,
-        preco: planoSelecionado?.preco,
-      },
-    });
+    if (selected === "Grátis") {
+      router.push("/inicialScreen" as any);
+    } else {
+      router.push({
+        pathname: "/Pagamentos",
+        params: {
+          plano: selected,
+          preco: planoSelecionado?.preco,
+        },
+      });
+    }
   }
 
   return (

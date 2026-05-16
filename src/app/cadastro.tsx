@@ -1,4 +1,4 @@
-import SocialButton from "./componentes";
+import SocialButton from "./componentes/socialButton";
 
 import {
   Alert,

@@ -1,4 +1,4 @@
-import SocialButton from "./componentes";
+import SocialButton from "./componentes/socialButton";
 
 import {
   Alert,
@@ -39,7 +39,7 @@ export default function Login() {
     Alert.alert("Sucesso", "Login realizado!", [
       {
         text: "OK",
-        onPress: () => router.replace("/verificar" as any),
+        onPress: () => router.replace("/inicialScreen" as any),
       },
     ]);
   }
