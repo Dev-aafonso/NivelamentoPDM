@@ -151,39 +151,76 @@ export default function Verificar() {
         pointerEvents={open ? "auto" : "none"}
         style={[styles.sidebar, { left: sidebarAnim }]}
       >
+        {/* FECHAR */}
         <TouchableOpacity onPress={closeSidebar}>
           <Text style={styles.close}>✕</Text>
         </TouchableOpacity>
 
         {/* PERFIL */}
-        <View style={styles.profileContainer}>
-          <Image source={profileImage} style={styles.profileImage} />
+        <TouchableOpacity
+          style={styles.profileContainer}
+          onPress={() => {
+            closeSidebar();
+            router.push("/perfil" as any);
+          }}
+        >
+          <Image
+            source={require("../assets/profile.png")} // SUA FOTO
+            style={styles.profileImage}
+          />
 
           <View>
             <Text style={styles.profileName}>Afonso Filho</Text>
             <Text style={styles.profilePlan}>Plano Gratuito</Text>
           </View>
-        </View>
+        </TouchableOpacity>
 
         <Text style={styles.sidebarTitle}>Menu</Text>
 
         {/* HISTÓRICO */}
-        <TouchableOpacity style={styles.sidebarCard}>
-          <Image source={historyIcon} style={styles.sidebarImageIcon} />
+        <TouchableOpacity
+          style={styles.sidebarCard}
+          onPress={() => {
+            closeSidebar();
+            router.push("/historico" as any);
+          }}
+        >
+          <Image
+            source={require("../assets/history.png")}
+            style={styles.sidebarImageIcon}
+          />
 
           <Text style={styles.sidebarText}>Histórico</Text>
         </TouchableOpacity>
 
         {/* VERIFICAÇÕES */}
-        <TouchableOpacity style={styles.sidebarCard}>
-          <Image source={verifyIcon} style={styles.sidebarImageIcon} />
+        <TouchableOpacity
+          style={styles.sidebarCard}
+          onPress={() => {
+            closeSidebar();
+            router.push("/verificadas" as any);
+          }}
+        >
+          <Image
+            source={require("../assets/verified.png")}
+            style={styles.sidebarImageIcon}
+          />
 
           <Text style={styles.sidebarText}>Verificações</Text>
         </TouchableOpacity>
 
         {/* CONFIGURAÇÕES */}
-        <TouchableOpacity style={styles.sidebarCard}>
-          <Image source={settingsIcon} style={styles.sidebarImageIcon} />
+        <TouchableOpacity
+          style={styles.sidebarCard}
+          onPress={() => {
+            closeSidebar();
+            router.push("/configuracoes" as any);
+          }}
+        >
+          <Image
+            source={require("../assets/settings.png")}
+            style={styles.sidebarImageIcon}
+          />
 
           <Text style={styles.sidebarText}>Configurações</Text>
         </TouchableOpacity>
