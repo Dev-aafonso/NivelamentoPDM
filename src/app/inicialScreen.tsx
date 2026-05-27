@@ -12,6 +12,10 @@ import {
 } from "react-native";
 
 const { width } = Dimensions.get("window");
+const profileImage = require("../assets/profile.png");
+const historyIcon = require("../assets/history.png");
+const verifyIcon = require("../assets/verified.png");
+const settingsIcon = require("../assets/settings.png");
 
 export default function Verificar() {
   const router = useRouter();
@@ -150,14 +154,38 @@ export default function Verificar() {
         <TouchableOpacity onPress={closeSidebar}>
           <Text style={styles.close}>✕</Text>
         </TouchableOpacity>
+
+        {/* PERFIL */}
+        <View style={styles.profileContainer}>
+          <Image source={profileImage} style={styles.profileImage} />
+
+          <View>
+            <Text style={styles.profileName}>Afonso Filho</Text>
+            <Text style={styles.profilePlan}>Plano Gratuito</Text>
+          </View>
+        </View>
+
         <Text style={styles.sidebarTitle}>Menu</Text>
+
+        {/* HISTÓRICO */}
         <TouchableOpacity style={styles.sidebarCard}>
-          <Text style={styles.sidebarIcon}>📜</Text>
+          <Image source={historyIcon} style={styles.sidebarImageIcon} />
+
           <Text style={styles.sidebarText}>Histórico</Text>
         </TouchableOpacity>
+
+        {/* VERIFICAÇÕES */}
         <TouchableOpacity style={styles.sidebarCard}>
-          <Text style={styles.sidebarIcon}>✔</Text>
+          <Image source={verifyIcon} style={styles.sidebarImageIcon} />
+
           <Text style={styles.sidebarText}>Verificações</Text>
+        </TouchableOpacity>
+
+        {/* CONFIGURAÇÕES */}
+        <TouchableOpacity style={styles.sidebarCard}>
+          <Image source={settingsIcon} style={styles.sidebarImageIcon} />
+
+          <Text style={styles.sidebarText}>Configurações</Text>
         </TouchableOpacity>
       </Animated.View>
     </View>
@@ -298,4 +326,38 @@ const styles = StyleSheet.create({
   },
   sidebarIcon: { fontSize: 20, marginRight: 12 },
   sidebarText: { fontSize: 17, color: "#333" },
+  profileContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10,
+    marginBottom: 30,
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E5E5",
+  },
+
+  profileImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 12,
+  },
+
+  profileName: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#702516",
+  },
+
+  profilePlan: {
+    fontSize: 14,
+    color: "#777",
+  },
+
+  sidebarImageIcon: {
+    width: 24,
+    height: 24,
+    marginRight: 12,
+    resizeMode: "contain",
+  },
 });
