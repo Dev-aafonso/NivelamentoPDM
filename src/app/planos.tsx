@@ -200,7 +200,6 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     color: "#702516",
     marginBottom: 18,
-    fontFamily: "Averia Serif Libre",
   },
 
   planosContainer: {

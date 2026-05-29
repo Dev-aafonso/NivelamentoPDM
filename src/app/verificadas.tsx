@@ -179,7 +179,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     color: "#702516",
-    fontFamily: "Averia Serif Libre",
     letterSpacing: 1,
   },
 
@@ -217,7 +216,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#702516",
     marginBottom: 22,
-    fontFamily: "Averia Serif Libre",
     textAlign: "center",
   },
 

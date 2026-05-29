@@ -183,7 +183,6 @@ const styles = StyleSheet.create({
     color: "#702516",
     letterSpacing: 2,
     marginBottom: 15,
-    fontFamily: "Averia Serif Libre",
   },
 
   forms: {

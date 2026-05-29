@@ -201,10 +201,8 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     color: "#702516",
     marginBottom: 10,
-    fontFamily: "Averia Serif Libre",
   },
 
-  // 🔥 NOVO ESTILO
   resumo: {
     backgroundColor: "#f7d64330",
     paddingVertical: 6,

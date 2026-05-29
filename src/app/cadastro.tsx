@@ -224,7 +224,6 @@ const styles = StyleSheet.create({
     color: "#702516",
     letterSpacing: 2,
     marginBottom: 15,
-    fontFamily: "Averia Serif Libre",
   },
 
   forms: {
@@ -273,7 +272,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignSelf: "center",
 
-    borderWidth: 1.5, // 👈 igual ao input
+    borderWidth: 1.5,
     borderColor: "#702516e4",
   },
 

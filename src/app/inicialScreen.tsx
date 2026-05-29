@@ -274,7 +274,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 12,
     fontWeight: "bold",
-    fontFamily: "Averia Serif Libre",
     letterSpacing: 1.5,
   },
   subtitle: {
@@ -300,7 +299,6 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    fontFamily: "Averia Serif Libre",
     color: "#702516",
     letterSpacing: 1,
   },
