@@ -1,17 +1,23 @@
 import {
   Animated,
+  Dimensions,
   Easing,
   Image,
   ImageBackground,
+  SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 
+import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
 
-import { useRouter } from "expo-router";
+const { width, height } = Dimensions.get("window");
+
+const isSmallDevice = width < 370 || height < 700;
 
 type AnimMap = {
   [key: string]: Animated.Value;
@@ -88,72 +94,85 @@ export default function Planos() {
       source={require("../assets/Background.png")}
       style={styles.background}
     >
-      <View style={styles.container}>
-        <View style={styles.card}>
-          <Image source={require("../assets/Logo.png")} style={styles.logo} />
+      <SafeAreaView style={{ flex: 1 }}>
+        <ScrollView
+          contentContainerStyle={styles.scroll}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.container}>
+            <View style={styles.card}>
+              <Image
+                source={require("../assets/Logo.png")}
+                style={styles.logo}
+              />
 
-          <Text style={styles.title}>Escolha seu plano</Text>
+              <Text style={styles.title}>Escolha seu plano</Text>
 
-          <View style={styles.planosContainer}>
-            {planos.map((plano) => {
-              const anim = getAnim(plano.nome);
-              const isActive = selected === plano.nome;
+              <View style={styles.planosContainer}>
+                {planos.map((plano) => {
+                  const anim = getAnim(plano.nome);
+                  const isActive = selected === plano.nome;
 
-              const scale = anim.interpolate({
-                inputRange: [0, 1],
-                outputRange: [1, 1.02],
-              });
+                  const scale = anim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [1, 1.02],
+                  });
 
-              const bgColor = anim.interpolate({
-                inputRange: [0, 1],
-                outputRange: ["#f2f2f2", "#f7d64363"],
-              });
+                  const bgColor = anim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ["#f2f2f2", "#f7d64363"],
+                  });
 
-              return (
-                <TouchableOpacity
-                  key={plano.nome}
-                  activeOpacity={0.9}
-                  onPress={() => selecionarPlano(plano.nome)}
-                >
-                  <Animated.View
-                    style={[
-                      styles.cardPlano,
-                      {
-                        transform: [{ scale }],
-                        backgroundColor: bgColor,
-                        borderColor: isActive ? "#3d120a" : "#702516",
-                      },
-                    ]}
-                  >
-                    {/* BADGE leve */}
-                    {plano.nome === "Plus" && (
-                      <View style={styles.badge}>
-                        <Text style={styles.badgeText}>POPULAR</Text>
-                      </View>
-                    )}
+                  return (
+                    <TouchableOpacity
+                      key={plano.nome}
+                      activeOpacity={0.9}
+                      onPress={() => selecionarPlano(plano.nome)}
+                    >
+                      <Animated.View
+                        style={[
+                          styles.cardPlano,
+                          {
+                            transform: [{ scale }],
+                            backgroundColor: bgColor,
+                            borderColor: isActive ? "#3d120a" : "#702516",
+                          },
+                        ]}
+                      >
+                        {plano.nome === "Plus" && (
+                          <View style={styles.badge}>
+                            <Text style={styles.badgeText}>POPULAR</Text>
+                          </View>
+                        )}
 
-                    <View
-                      style={[styles.radio, isActive && styles.radioActive]}
-                    />
+                        <View
+                          style={[styles.radio, isActive && styles.radioActive]}
+                        />
 
-                    <View style={styles.info}>
-                      <Text style={styles.nome}>{plano.nome}</Text>
-                      <Text style={styles.preco}>{plano.preco}</Text>
-                      <Text style={styles.descricao}>{plano.descricao}</Text>
-                    </View>
-                  </Animated.View>
-                </TouchableOpacity>
-              );
-            })}
+                        <View style={styles.info}>
+                          <Text style={styles.nome}>{plano.nome}</Text>
+
+                          <Text style={styles.preco}>{plano.preco}</Text>
+
+                          <Text style={styles.descricao}>
+                            {plano.descricao}
+                          </Text>
+                        </View>
+                      </Animated.View>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+
+              <TouchableOpacity style={styles.botao} onPress={escolherPlano}>
+                <Text style={styles.botaoTexto}>Escolher {selected}</Text>
+              </TouchableOpacity>
+
+              <Text style={styles.footer}>VERATES.IA</Text>
+            </View>
           </View>
-
-          <TouchableOpacity style={styles.botao} onPress={escolherPlano}>
-            <Text style={styles.botaoTexto}>Escolher {selected}</Text>
-          </TouchableOpacity>
-
-          <Text style={styles.footer}>VERATES.IA</Text>
-        </View>
-      </View>
+        </ScrollView>
+      </SafeAreaView>
     </ImageBackground>
   );
 }
@@ -163,80 +182,116 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
+  scroll: {
+    flexGrow: 1,
+    justifyContent: "center",
+    paddingVertical: isSmallDevice ? 20 : 30,
+  },
+
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 30,
-    paddingHorizontal: 10,
+    paddingHorizontal: isSmallDevice ? 14 : 18,
   },
 
   card: {
-    width: "92%",
+    width: "100%",
     maxWidth: 420,
+
     backgroundColor: "#fff",
-    borderRadius: 12,
-    paddingVertical: 20,
-    paddingHorizontal: 16,
+
+    borderRadius: isSmallDevice ? 18 : 22,
+
+    paddingVertical: isSmallDevice ? 18 : 22,
+    paddingHorizontal: isSmallDevice ? 14 : 18,
+
     alignItems: "center",
+
     borderWidth: 2,
     borderColor: "#702516e4",
 
     shadowColor: "#000",
-    shadowOffset: { width: 4, height: 6 },
+    shadowOffset: {
+      width: 4,
+      height: 6,
+    },
     shadowOpacity: 0.2,
     shadowRadius: 3.84,
+
+    elevation: 8,
   },
 
   logo: {
-    width: 80,
-    height: 80,
+    width: isSmallDevice ? 65 : 80,
+    height: isSmallDevice ? 65 : 80,
+
     resizeMode: "contain",
+
     marginBottom: 8,
   },
 
   title: {
-    fontSize: 22,
+    fontSize: isSmallDevice ? 20 : 22,
+
     fontWeight: "900",
+
     color: "#702516",
-    marginBottom: 18,
+
+    marginBottom: isSmallDevice ? 14 : 18,
+
+    textAlign: "center",
   },
 
   planosContainer: {
     width: "100%",
-    gap: 12,
+    gap: isSmallDevice ? 10 : 12,
   },
 
   cardPlano: {
     flexDirection: "row",
-    borderRadius: 10,
-    padding: 14,
+
+    borderRadius: 12,
+
+    paddingVertical: isSmallDevice ? 12 : 14,
+    paddingHorizontal: isSmallDevice ? 12 : 14,
+
     borderWidth: 1.5,
+
     alignItems: "center",
   },
 
   badge: {
     position: "absolute",
+
     top: -8,
     right: 8,
+
     backgroundColor: "#702516",
+
     paddingHorizontal: 6,
     paddingVertical: 2,
+
     borderRadius: 5,
   },
 
   badgeText: {
     color: "#fff",
+
     fontSize: 9,
+
     fontWeight: "bold",
   },
 
   radio: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: isSmallDevice ? 18 : 20,
+    height: isSmallDevice ? 18 : 20,
+
+    borderRadius: 999,
+
     borderWidth: 2,
     borderColor: "#702516",
+
     marginRight: 12,
   },
 
@@ -250,43 +305,65 @@ const styles = StyleSheet.create({
   },
 
   nome: {
-    fontSize: 16,
+    fontSize: isSmallDevice ? 15 : 16,
+
     fontWeight: "bold",
   },
 
   preco: {
-    fontSize: 15,
+    fontSize: isSmallDevice ? 14 : 15,
+
     color: "#702516",
+
     fontWeight: "600",
+
+    marginTop: 1,
   },
 
   descricao: {
-    fontSize: 12,
+    fontSize: isSmallDevice ? 11 : 12,
+
     color: "#333",
+
+    marginTop: 2,
+
+    lineHeight: isSmallDevice ? 16 : 18,
   },
 
   botao: {
     backgroundColor: "#702516",
-    borderRadius: 10,
-    paddingVertical: 14,
+
+    borderRadius: 12,
+
+    paddingVertical: isSmallDevice ? 13 : 14,
+
     width: "100%",
+
     alignItems: "center",
-    marginTop: 20,
+
+    marginTop: isSmallDevice ? 18 : 20,
+
     borderWidth: 1.5,
     borderColor: "#3d120a",
   },
 
   botaoTexto: {
     color: "#fff",
+
     fontWeight: "bold",
-    fontSize: 16,
+
+    fontSize: isSmallDevice ? 15 : 16,
   },
 
   footer: {
-    marginTop: 15,
-    fontSize: 16,
+    marginTop: isSmallDevice ? 14 : 15,
+
+    fontSize: isSmallDevice ? 14 : 16,
+
     color: "#702516",
+
     fontFamily: "Averia Serif Libre",
+
     fontWeight: "bold",
   },
 });

@@ -13,6 +13,9 @@ import {
 
 const { width, height } = Dimensions.get("window");
 
+const isSmallDevice = height < 700;
+const isVerySmallDevice = width < 360;
+
 export default function ResultadoAnalise() {
   const router = useRouter();
 
@@ -145,6 +148,7 @@ export default function ResultadoAnalise() {
                   source={require("../assets/arrowLeft.png")}
                   style={styles.arrowIcon}
                 />
+
                 <Image
                   source={require("../assets/image.png")}
                   style={styles.sourceIcon}
@@ -178,23 +182,21 @@ export default function ResultadoAnalise() {
   );
 }
 
-const isSmallDevice = height < 700;
-
 const styles = StyleSheet.create({
   background: {
     flex: 1,
   },
 
   scroll: {
-    paddingHorizontal: 20,
-    paddingTop: 18,
+    paddingHorizontal: width < 380 ? 14 : 20,
+    paddingTop: isSmallDevice ? 12 : 18,
     paddingBottom: 40,
     alignItems: "center",
   },
 
   backButtonContainer: {
-    width: 55,
-    height: 55,
+    width: isVerySmallDevice ? 48 : 55,
+    height: isVerySmallDevice ? 48 : 55,
 
     borderRadius: 999,
 
@@ -218,19 +220,13 @@ const styles = StyleSheet.create({
 
     alignSelf: "flex-start",
 
-    marginBottom: 18,
+    marginBottom: isSmallDevice ? 14 : 18,
   },
 
   backButton: {
-    fontSize: 28,
+    fontSize: isVerySmallDevice ? 24 : 28,
     color: "#702516",
     fontWeight: "bold",
-  },
-  backText: {
-    fontSize: 34,
-    color: "#2B1A17",
-    fontWeight: "600",
-    marginTop: -4,
   },
 
   card: {
@@ -239,10 +235,10 @@ const styles = StyleSheet.create({
 
     backgroundColor: "#FFFFFF",
 
-    borderRadius: 28,
+    borderRadius: width < 380 ? 22 : 28,
 
-    paddingHorizontal: 20,
-    paddingVertical: 24,
+    paddingHorizontal: width < 380 ? 14 : 20,
+    paddingVertical: width < 380 ? 18 : 24,
 
     borderWidth: 2,
     borderColor: "#702516ab",
@@ -259,7 +255,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: width < 380 ? 28 : 32,
+    fontSize: isVerySmallDevice ? 22 : width < 380 ? 28 : 32,
     textAlign: "center",
 
     color: "#702516",
@@ -269,29 +265,31 @@ const styles = StyleSheet.create({
   },
 
   subtitle: {
-    marginTop: 14,
+    marginTop: 12,
 
     textAlign: "center",
 
     color: "#555",
 
-    fontSize: width < 380 ? 13 : 15,
+    fontSize: isVerySmallDevice ? 12 : width < 380 ? 13 : 15,
 
-    lineHeight: 24,
+    lineHeight: isVerySmallDevice ? 20 : 24,
   },
 
   resultCard: {
     width: "100%",
 
-    marginTop: 28,
+    marginTop: isSmallDevice ? 20 : 28,
 
     backgroundColor: "#F5F5F5",
 
-    borderRadius: 24,
+    borderRadius: width < 380 ? 18 : 24,
+
     borderWidth: 1.5,
     borderColor: "#702516ab",
-    paddingVertical: 26,
-    paddingHorizontal: 20,
+
+    paddingVertical: width < 380 ? 18 : 26,
+    paddingHorizontal: width < 380 ? 14 : 20,
 
     alignItems: "center",
   },
@@ -336,7 +334,6 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
 
-  /* SCORE */
   scoreArea: {
     marginTop: 28,
   },
@@ -443,31 +440,38 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    flexWrap: "wrap",
   },
 
   sourceIcon: {
-    width: width < 380 ? 34 : 40,
-    height: width < 380 ? 34 : 40,
+    width: isVerySmallDevice ? 28 : width < 380 ? 34 : 40,
+    height: isVerySmallDevice ? 28 : width < 380 ? 34 : 40,
 
     resizeMode: "contain",
   },
 
-  arrow: {
-    fontSize: width < 380 ? 22 : 28,
-    marginHorizontal: 10,
-    color: "#222",
+  arrowIcon: {
+    width: isVerySmallDevice ? 14 : 20,
+    height: isVerySmallDevice ? 14 : 20,
+
+    resizeMode: "contain",
+
+    marginHorizontal: isVerySmallDevice ? 6 : 10,
+
+    tintColor: "#222",
   },
 
   button: {
     width: "100%",
 
-    marginTop: 30,
+    marginTop: isSmallDevice ? 22 : 30,
 
     backgroundColor: "#8B3A2E",
 
     borderRadius: 999,
 
-    paddingVertical: 18,
+    paddingVertical: isVerySmallDevice ? 14 : 18,
+    paddingHorizontal: 14,
 
     flexDirection: "row",
 
@@ -478,32 +482,18 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#FFF",
 
-    fontSize: width < 380 ? 16 : 18,
+    fontSize: isVerySmallDevice ? 14 : width < 380 ? 16 : 18,
 
     fontWeight: "600",
 
     marginRight: 8,
-  },
 
-  buttonArrow: {
-    color: "#FFF",
-    fontSize: 22,
-  },
-
-  arrowIcon: {
-    width: 20,
-    height: 20,
-
-    resizeMode: "contain",
-
-    marginHorizontal: 10,
-
-    tintColor: "#222",
+    textAlign: "center",
   },
 
   buttonArrowIcon: {
-    width: 22,
-    height: 22,
+    width: isVerySmallDevice ? 18 : 22,
+    height: isVerySmallDevice ? 18 : 22,
 
     resizeMode: "contain",
 

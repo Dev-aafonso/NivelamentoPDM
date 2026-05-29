@@ -1,5 +1,6 @@
 import { useRouter } from "expo-router";
 import {
+  Dimensions,
   FlatList,
   ImageBackground,
   SafeAreaView,
@@ -8,6 +9,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
+const { width, height } = Dimensions.get("window");
+
+const isSmallDevice = height < 700;
+const isVerySmallDevice = height < 640;
 
 const verificacoes = [
   {
@@ -67,7 +73,7 @@ export default function Verificacoes() {
 
             <Text style={styles.headerTitle}>Verificações</Text>
 
-            <View style={{ width: 55 }} />
+            <View style={{ width: isSmallDevice ? 48 : 55 }} />
           </View>
 
           {/* CARD PRINCIPAL */}
@@ -127,8 +133,9 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    paddingTop: 50,
-    paddingHorizontal: 20,
+    paddingTop: isVerySmallDevice ? 20 : isSmallDevice ? 35 : 50,
+    paddingHorizontal: width < 380 ? 14 : 20,
+    paddingBottom: 20,
     alignItems: "center",
   },
 
@@ -141,12 +148,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
 
-    marginBottom: 22,
+    marginBottom: isSmallDevice ? 16 : 22,
   },
 
   backButtonContainer: {
-    width: 55,
-    height: 55,
+    width: isSmallDevice ? 48 : 55,
+    height: isSmallDevice ? 48 : 55,
 
     borderRadius: 999,
 
@@ -170,13 +177,13 @@ const styles = StyleSheet.create({
   },
 
   backButton: {
-    fontSize: 28,
+    fontSize: isSmallDevice ? 24 : 28,
     color: "#702516",
     fontWeight: "bold",
   },
 
   headerTitle: {
-    fontSize: 28,
+    fontSize: width < 380 ? 22 : isSmallDevice ? 24 : 28,
     fontWeight: "bold",
     color: "#702516",
     letterSpacing: 1,
@@ -185,17 +192,17 @@ const styles = StyleSheet.create({
   /* CARD PRINCIPAL */
 
   card: {
-    width: "95%",
+    width: "100%",
     maxWidth: 480,
 
     flex: 1,
 
     backgroundColor: "#ffffff",
 
-    borderRadius: 24,
+    borderRadius: width < 380 ? 20 : 24,
 
-    paddingVertical: 28,
-    paddingHorizontal: 20,
+    paddingVertical: isSmallDevice ? 20 : 28,
+    paddingHorizontal: width < 380 ? 14 : 20,
 
     elevation: 8,
 
@@ -212,11 +219,12 @@ const styles = StyleSheet.create({
   },
 
   cardTitle: {
-    fontSize: 20,
+    fontSize: width < 380 ? 17 : isSmallDevice ? 18 : 20,
     fontWeight: "bold",
     color: "#702516",
-    marginBottom: 22,
+    marginBottom: isSmallDevice ? 16 : 22,
     textAlign: "center",
+    lineHeight: width < 380 ? 24 : 28,
   },
 
   listContent: {
@@ -230,9 +238,9 @@ const styles = StyleSheet.create({
 
     backgroundColor: "#F8F8F8",
 
-    borderRadius: 18,
+    borderRadius: width < 380 ? 14 : 18,
 
-    padding: 18,
+    padding: width < 380 ? 14 : 18,
 
     marginBottom: 16,
 
@@ -243,30 +251,30 @@ const styles = StyleSheet.create({
   },
 
   statusDot: {
-    width: 14,
-    height: 14,
+    width: width < 380 ? 12 : 14,
+    height: width < 380 ? 12 : 14,
 
-    borderRadius: 7,
+    borderRadius: 999,
 
     marginTop: 5,
-    marginRight: 14,
+    marginRight: width < 380 ? 10 : 14,
   },
 
   status: {
     fontWeight: "bold",
-    fontSize: 15,
+    fontSize: width < 380 ? 13 : 15,
     marginBottom: 6,
   },
 
   title: {
-    fontSize: 16,
+    fontSize: width < 380 ? 14 : 16,
     color: "#333",
-    lineHeight: 24,
+    lineHeight: width < 380 ? 20 : 24,
     marginBottom: 10,
   },
 
   date: {
     color: "#888",
-    fontSize: 13,
+    fontSize: width < 380 ? 11 : 13,
   },
 });
