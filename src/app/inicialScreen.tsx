@@ -107,7 +107,7 @@ export default function Verificar() {
                 style={styles.icon}
               />
               <View style={styles.optionTextContainer}>
-                <Text style={styles.cardTitle}>Inserir texto</Text>
+                <Text style={styles.cardTitle}>Analisar texto</Text>
                 <Text style={styles.cardSubtitle}>
                   Cole ou digite o conteúdo
                 </Text>

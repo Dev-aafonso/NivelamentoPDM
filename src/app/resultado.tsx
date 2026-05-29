@@ -141,14 +141,19 @@ export default function ResultadoAnalise() {
                   style={styles.sourceIcon}
                 />
 
-                <Text style={styles.arrow}>➜</Text>
-
+                <Image
+                  source={require("../assets/arrowLeft.png")}
+                  style={styles.arrowIcon}
+                />
                 <Image
                   source={require("../assets/image.png")}
                   style={styles.sourceIcon}
                 />
 
-                <Text style={styles.arrow}>➜</Text>
+                <Image
+                  source={require("../assets/arrowLeft.png")}
+                  style={styles.arrowIcon}
+                />
 
                 <Image
                   source={require("../assets/image.png")}
@@ -161,7 +166,10 @@ export default function ResultadoAnalise() {
             <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonText}>Ver detalhes da análise</Text>
 
-              <Text style={styles.buttonArrow}>➜</Text>
+              <Image
+                source={require("../assets/send.png")}
+                style={styles.buttonArrowIcon}
+              />
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -480,5 +488,25 @@ const styles = StyleSheet.create({
   buttonArrow: {
     color: "#FFF",
     fontSize: 22,
+  },
+
+  arrowIcon: {
+    width: 20,
+    height: 20,
+
+    resizeMode: "contain",
+
+    marginHorizontal: 10,
+
+    tintColor: "#222",
+  },
+
+  buttonArrowIcon: {
+    width: 22,
+    height: 22,
+
+    resizeMode: "contain",
+
+    tintColor: "#FFF",
   },
 });
