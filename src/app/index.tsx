@@ -18,6 +18,11 @@ import {
 import { useRouter } from "expo-router";
 import { useState } from "react";
 
+const { width, height } = Dimensions.get("window");
+
+const isSmallDevice = height < 700;
+const isVerySmallDevice = height < 640;
+
 export default function Login() {
   const router = useRouter();
 
@@ -76,6 +81,7 @@ export default function Login() {
               <Text style={styles.label}>E-mail</Text>
               <TextInput
                 placeholder="Digite seu e-mail"
+                placeholderTextColor="#777"
                 style={styles.input}
                 value={email}
                 onChangeText={setEmail}
@@ -87,6 +93,7 @@ export default function Login() {
               <Text style={styles.label}>Senha</Text>
               <TextInput
                 placeholder="Digite sua senha"
+                placeholderTextColor="#777"
                 secureTextEntry
                 style={styles.input}
                 value={senha}
@@ -123,11 +130,13 @@ export default function Login() {
                   text="Google"
                   onPress={() => Alert.alert("Login com Google")}
                 />
+
                 <SocialButton
                   source={require("../assets/Apple.png")}
                   text="Apple"
                   onPress={() => Alert.alert("Login com Apple")}
                 />
+
                 <SocialButton
                   source={require("../assets/Facebook.png")}
                   text="Facebook"
@@ -142,25 +151,31 @@ export default function Login() {
   );
 }
 
-// ⚠️ mantém seus styles (não alterei)
-
 const styles = StyleSheet.create({
   background: {
     flex: 1,
     resizeMode: "cover",
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: width < 380 ? 14 : 20,
+    paddingVertical: isVerySmallDevice ? 20 : 30,
   },
 
   card: {
-    width: "90%",
+    width: "100%",
     maxWidth: 400,
+
     backgroundColor: "#ffffff",
-    borderRadius: 10,
-    paddingVertical: 25,
-    paddingHorizontal: 15,
+
+    borderRadius: width < 380 ? 18 : 22,
+
+    paddingVertical: isVerySmallDevice ? 18 : isSmallDevice ? 22 : 25,
+    paddingHorizontal: width < 380 ? 12 : 15,
+
     elevation: 5,
+
     alignItems: "center",
+
     borderWidth: 2,
     borderColor: "#702516e4",
 
@@ -171,18 +186,24 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    width: 80,
-    height: 80,
+    width: width < 380 ? 65 : isSmallDevice ? 72 : 80,
+    height: width < 380 ? 65 : isSmallDevice ? 72 : 80,
+
     resizeMode: "contain",
-    marginBottom: 10,
+
+    marginBottom: isSmallDevice ? 6 : 10,
   },
 
   title: {
-    fontSize: 22,
+    fontSize: width < 380 ? 18 : isSmallDevice ? 20 : 22,
+
     fontWeight: "900",
+
     color: "#702516",
-    letterSpacing: 2,
-    marginBottom: 15,
+
+    letterSpacing: width < 380 ? 1 : 2,
+
+    marginBottom: isSmallDevice ? 12 : 15,
   },
 
   forms: {
@@ -191,32 +212,49 @@ const styles = StyleSheet.create({
 
   label: {
     width: "90%",
+
     alignSelf: "center",
-    fontSize: 14,
+
+    fontSize: width < 380 ? 13 : 14,
+
     color: "#702516",
+
     marginBottom: 4,
-    marginTop: 8,
+    marginTop: isSmallDevice ? 6 : 8,
   },
 
   input: {
     width: "90%",
-    height: 50,
+
+    height: width < 380 ? 46 : 50,
+
     backgroundColor: "#F5F5F5",
+
     borderRadius: 8,
-    padding: 10,
+
+    paddingHorizontal: 10,
+
     borderWidth: 1.5,
     borderColor: "#702516e4",
-    fontSize: 16,
+
+    fontSize: width < 380 ? 14 : 16,
+
     alignSelf: "center",
   },
 
   button: {
     backgroundColor: "#702516",
+
     borderRadius: 8,
-    paddingVertical: 14,
+
+    paddingVertical: width < 380 ? 12 : 14,
+
     width: "90%",
+
     alignItems: "center",
-    marginTop: 15,
+
+    marginTop: isSmallDevice ? 12 : 15,
+
     alignSelf: "center",
   },
 
@@ -226,23 +264,33 @@ const styles = StyleSheet.create({
 
   buttonText: {
     color: "#fff",
+
     fontWeight: "bold",
-    fontSize: 16,
+
+    fontSize: width < 380 ? 14 : 16,
   },
 
   loginText: {
     padding: 10,
-    marginTop: 10,
+
+    marginTop: 8,
+
     color: "#702516",
-    fontSize: 14,
+
+    fontSize: width < 380 ? 12 : 14,
+
     textAlign: "center",
   },
 
   separatorContainer: {
     flexDirection: "row",
+
     alignItems: "center",
-    marginVertical: 15,
+
+    marginVertical: isSmallDevice ? 12 : 15,
+
     width: "90%",
+
     alignSelf: "center",
   },
 
@@ -256,12 +304,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     color: "#888",
     fontWeight: "bold",
+    fontSize: width < 380 ? 12 : 14,
   },
 
   socialContainer: {
     flexDirection: "row",
     justifyContent: "center",
     flexWrap: "wrap",
-    marginTop: 10,
+    marginTop: 8,
+    gap: width < 380 ? 8 : 10,
   },
 });

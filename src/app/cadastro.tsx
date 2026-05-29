@@ -18,6 +18,11 @@ import {
 import { useRouter } from "expo-router";
 import { useState } from "react";
 
+const { width, height } = Dimensions.get("window");
+
+const isSmallDevice = height < 700;
+const isVerySmallDevice = height < 620;
+
 export default function Cadastro() {
   const router = useRouter();
 
@@ -58,6 +63,7 @@ export default function Cadastro() {
   }
 
   const hasErrors = Object.values(errors).some((e) => e);
+
   const isDisabled =
     !username || !email || !senha || !confirmSenha || hasErrors;
 
@@ -67,12 +73,17 @@ export default function Cadastro() {
       style={{ flex: 1 }}
     >
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "center",
+          paddingVertical: isVerySmallDevice ? 25 : 40,
+        }}
         showsVerticalScrollIndicator={false}
         scrollEnabled={scrollEnabled}
         onContentSizeChange={(w, h) => {
           setScrollEnabled(h > Dimensions.get("window").height);
         }}
+        keyboardShouldPersistTaps="handled"
       >
         <ImageBackground
           source={require("../assets/Background.png")}
@@ -80,12 +91,15 @@ export default function Cadastro() {
         >
           <View style={styles.card}>
             <Image source={require("../assets/Logo.png")} style={styles.logo} />
+
             <Text style={styles.title}>VERATES.IA</Text>
 
             <View style={styles.forms}>
               <Text style={styles.label}>Nome de Usuário</Text>
+
               <TextInput
                 placeholder="Digite seu nome"
+                placeholderTextColor="#777"
                 style={[styles.input, errors.username && styles.inputError]}
                 value={username}
                 onChangeText={(t) => {
@@ -93,13 +107,18 @@ export default function Cadastro() {
                   setErrors({ ...errors, username: "" });
                 }}
               />
+
               {!!errors.username && (
                 <Text style={styles.errorText}>{errors.username}</Text>
               )}
 
               <Text style={styles.label}>E-mail</Text>
+
               <TextInput
                 placeholder="Digite seu e-mail"
+                placeholderTextColor="#777"
+                keyboardType="email-address"
+                autoCapitalize="none"
                 style={[styles.input, errors.email && styles.inputError]}
                 value={email}
                 onChangeText={(t) => {
@@ -107,13 +126,16 @@ export default function Cadastro() {
                   setErrors({ ...errors, email: "" });
                 }}
               />
+
               {!!errors.email && (
                 <Text style={styles.errorText}>{errors.email}</Text>
               )}
 
               <Text style={styles.label}>Senha</Text>
+
               <TextInput
                 placeholder="Digite sua senha"
+                placeholderTextColor="#777"
                 secureTextEntry
                 style={[styles.input, errors.senha && styles.inputError]}
                 value={senha}
@@ -122,13 +144,16 @@ export default function Cadastro() {
                   setErrors({ ...errors, senha: "" });
                 }}
               />
+
               {!!errors.senha && (
                 <Text style={styles.errorText}>{errors.senha}</Text>
               )}
 
               <Text style={styles.label}>Confirmar Senha</Text>
+
               <TextInput
                 placeholder="Confirme sua senha"
+                placeholderTextColor="#777"
                 secureTextEntry
                 style={[styles.input, errors.confirmSenha && styles.inputError]}
                 value={confirmSenha}
@@ -137,6 +162,7 @@ export default function Cadastro() {
                   setErrors({ ...errors, confirmSenha: "" });
                 }}
               />
+
               {!!errors.confirmSenha && (
                 <Text style={styles.errorText}>{errors.confirmSenha}</Text>
               )}
@@ -145,6 +171,7 @@ export default function Cadastro() {
                 style={[styles.button, isDisabled && styles.buttonDisabled]}
                 onPress={handleCadastro}
                 disabled={isDisabled}
+                activeOpacity={0.85}
               >
                 <Text style={styles.buttonText}>Cadastrar</Text>
               </TouchableOpacity>
@@ -157,7 +184,9 @@ export default function Cadastro() {
 
               <View style={styles.separatorContainer}>
                 <View style={styles.line} />
+
                 <Text style={styles.separatorText}>OU</Text>
+
                 <View style={styles.line} />
               </View>
 
@@ -167,11 +196,13 @@ export default function Cadastro() {
                   text="Google"
                   onPress={() => Alert.alert("Google")}
                 />
+
                 <SocialButton
                   source={require("../assets/Apple.png")}
                   text="Apple"
                   onPress={() => Alert.alert("Apple")}
                 />
+
                 <SocialButton
                   source={require("../assets/Facebook.png")}
                   text="Facebook"
@@ -189,64 +220,93 @@ export default function Cadastro() {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
+
     resizeMode: "cover",
+
     alignItems: "center",
     justifyContent: "center",
+
+    paddingHorizontal: 14,
   },
 
   card: {
-    width: "90%",
+    width: "100%",
     maxWidth: 400,
+
     backgroundColor: "#ffffff",
-    borderRadius: 10,
-    paddingVertical: 25,
-    paddingHorizontal: 15,
+
+    borderRadius: isSmallDevice ? 18 : 22,
+
+    paddingVertical: isVerySmallDevice ? 18 : 25,
+    paddingHorizontal: isVerySmallDevice ? 12 : 15,
+
     elevation: 5,
+
     alignItems: "center",
+
     borderWidth: 2,
     borderColor: "#702516e4",
 
     shadowColor: "#000",
-    shadowOffset: { width: 4, height: 6 },
+    shadowOffset: {
+      width: 4,
+      height: 6,
+    },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
 
   logo: {
-    width: 80,
-    height: 80,
+    width: isVerySmallDevice ? 65 : 80,
+    height: isVerySmallDevice ? 65 : 80,
+
     resizeMode: "contain",
   },
 
   title: {
-    fontSize: 22,
+    fontSize: width < 380 ? 20 : 22,
+
     fontWeight: "900",
+
     color: "#702516",
+
     letterSpacing: 2,
-    marginBottom: 15,
+
+    marginBottom: isSmallDevice ? 10 : 15,
   },
 
   forms: {
     width: "100%",
-    gap: 10,
+
+    gap: isVerySmallDevice ? 6 : 10,
   },
 
   label: {
     width: "90%",
+
     alignSelf: "center",
-    fontSize: 14,
+
+    fontSize: width < 380 ? 13 : 14,
+
     color: "#702516",
   },
 
   input: {
     width: "90%",
-    height: 50,
+
+    height: isVerySmallDevice ? 46 : 50,
+
     backgroundColor: "#F5F5F5",
+
     borderRadius: 8,
-    padding: 10,
+
+    paddingHorizontal: 10,
+
     borderWidth: 1.5,
     borderColor: "#702516e4",
-    fontSize: 16,
+
+    fontSize: width < 380 ? 14 : 16,
+
     alignSelf: "center",
   },
 
@@ -256,20 +316,30 @@ const styles = StyleSheet.create({
 
   errorText: {
     color: "red",
+
     fontSize: 12,
+
     width: "90%",
+
     alignSelf: "center",
-    marginTop: -5,
-    marginBottom: 5,
+
+    marginTop: -3,
+    marginBottom: 2,
   },
 
   button: {
     backgroundColor: "#702516",
+
     borderRadius: 8,
-    paddingVertical: 14,
+
+    paddingVertical: isVerySmallDevice ? 12 : 14,
+
     width: "90%",
+
     alignItems: "center",
+
     marginTop: 10,
+
     alignSelf: "center",
 
     borderWidth: 1.5,
@@ -282,44 +352,65 @@ const styles = StyleSheet.create({
 
   buttonText: {
     color: "#fff",
+
     fontWeight: "bold",
-    fontSize: 16,
+
+    fontSize: width < 380 ? 15 : 16,
   },
 
   loginText: {
     padding: 10,
-    marginTop: 10,
+
+    marginTop: 8,
+
     color: "#702516",
-    fontSize: 14,
+
+    fontSize: width < 380 ? 13 : 14,
+
     textAlign: "center",
   },
 
   separatorContainer: {
     flexDirection: "row",
+
     alignItems: "center",
+
     marginVertical: 10,
+
     width: "90%",
+
     alignSelf: "center",
+
     paddingHorizontal: 10,
   },
 
   line: {
     flex: 1,
+
     height: 1,
+
     backgroundColor: "#ccc",
   },
 
   separatorText: {
     marginHorizontal: 10,
+
     color: "#888",
+
     fontWeight: "bold",
+
+    fontSize: width < 380 ? 12 : 14,
   },
 
   socialContainer: {
     flexDirection: "row",
+
     justifyContent: "center",
+
     flexWrap: "wrap",
-    gap: 10,
+
+    gap: width < 380 ? 8 : 10,
+
     marginTop: 10,
   },
 });
