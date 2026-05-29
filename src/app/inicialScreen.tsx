@@ -85,7 +85,10 @@ export default function Verificar() {
               Escolha o tipo de conteúdo para analisarmos a veracidade.
             </Text>
 
-            <TouchableOpacity style={styles.optionCard}>
+            <TouchableOpacity
+              style={styles.optionCard}
+              onPress={() => router.push("/analisarLink" as any)}
+            >
               <Image
                 source={require("../assets/paperclip.png")}
                 style={styles.icon}
